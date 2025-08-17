@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css"; // ✅ Import Tailwind styles
+import StarField from "@/components/StarField";
 
 export const metadata: Metadata = {
   title: "Ketan Gandhi | Portfolio",
@@ -13,7 +14,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-white text-gray-900">{children}</body>
+      <body className="bg-slate-900 text-white relative min-h-screen">
+        <StarField />
+        <div className="relative z-10">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
