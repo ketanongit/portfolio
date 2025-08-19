@@ -5,25 +5,53 @@ import Experience from "@/components/Experience";
 import Projects from "@/components/Project";
 import Achievements from "@/components/Achievements";
 import Skills from "@/components/Skills";
+import ExpandableScrollNav from "@/components/ExpandableScrollNav";
+import MobileNav from "@/components/MobileNav";
+import ScrollToTop from "@/components/ScrollToTop";
+import PageTransition from "@/components/PageTransition";
 
 export default async function HomePage() {
   try {
-  const [heroData] = await db.select().from(schema.hero);
-  const educationData = await db.select().from(schema.education);
-  const experienceData = await db.select().from(schema.experience);
-  const projectsData = await db.select().from(schema.projects);
-  const achievementsData = await db.select().from(schema.achievements);
-  const skillsData = await db.select().from(schema.skills);
+    const [heroData] = await db.select().from(schema.hero);
+    const educationData = await db.select().from(schema.education);
+    const experienceData = await db.select().from(schema.experience);
+    const projectsData = await db.select().from(schema.projects);
+    const achievementsData = await db.select().from(schema.achievements);
+    const skillsData = await db.select().from(schema.skills);
 
-  return (
-    <main className="container mx-auto px-4 py-8 space-y-16">
-      <Hero hero={heroData} />
-      <Education items={educationData} />
-      <Experience items={experienceData} />
-      <Projects items={projectsData} />
-        <Skills items={skillsData} />
-      <Achievements items={achievementsData} />
-      </main>
+    return (
+      <>
+        <ExpandableScrollNav />
+        <MobileNav />
+        <ScrollToTop />
+        <PageTransition>
+          <main className="container mx-auto px-4 lg:pr-16 py-8 space-y-20">
+            <section id="hero">
+              <Hero hero={heroData} />
+            </section>
+
+            <section id="experience">
+              <Experience items={experienceData} />
+            </section>
+
+            <section id="projects">
+              <Projects items={projectsData} />
+            </section>
+
+            <section id="skills">
+              <Skills items={skillsData} />
+            </section>
+
+            <section id="education">
+              <Education items={educationData} />
+            </section>
+
+            <section id="achievements">
+              <Achievements items={achievementsData} />
+            </section>
+          </main>
+        </PageTransition>
+      </>
     );
   } catch (error) {
     console.error('Database error:', error);
@@ -37,7 +65,7 @@ export default async function HomePage() {
             <p className="text-gray-400 mt-2">Please check your database connection</p>
           </div>
         </div>
-    </main>
-  );
+      </main>
+    );
   }
 }
