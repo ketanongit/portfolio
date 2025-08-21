@@ -4,6 +4,28 @@ import { motion, Variants } from "framer-motion";
 import { schema } from "@/lib/drizzle";
 
 export default function Experience({ items }: { items: typeof schema.experience.$inferSelect[] }) {
+  const sortedItems = [...items].sort((a, b) => {
+    const getDate = (dateString: string) => {
+      if (dateString.toLowerCase() === 'present') {
+        return new Date();
+      }
+      return new Date(dateString);
+    };
+
+    const dateA = getDate(a.endDate ?? "");
+    const dateB = getDate(b.endDate ?? "");
+
+    if (dateB.getTime() !== dateA.getTime()) {
+      return dateB.getTime() - dateA.getTime();
+    }
+
+    // If end dates are the same, sort by start date
+    const startDateA = new Date(a.startDate ?? "");
+    const startDateB = new Date(b.startDate ?? "");
+
+    return startDateB.getTime() - startDateA.getTime();
+  });
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -52,7 +74,7 @@ export default function Experience({ items }: { items: typeof schema.experience.
         />
 
         <div className="space-y-8">
-          {items.map((exp, index) => (
+          {sortedItems.map((exp, index) => (
             <motion.div
               key={exp.id}
               className="relative flex items-start gap-8"
